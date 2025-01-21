@@ -1,0 +1,25 @@
+kafka:
+  # Specifies the Kafka broker(s) that the application will connect to.
+  #localhost:9092 means Kafka is running locally on port 9092. For production, this would be the IPs or hostnames of the Kafka brokers.
+  bootstrap-servers: localhost:9092
+  consumer:  #Configures Kafka consumers, which read messages from Kafka topics.
+    #Sets the consumer group ID to batch-group.
+    #All consumers with the same group ID work together to consume messages from a topic, ensuring each message is processed only once by the group.
+    group-id: batch-group
+    #Determines what happens if there is no committed offset for a partition (e.g., the consumer starts fresh).
+    #earliest: The consumer starts reading messages from the beginning of the partition.
+    #Another option is latest, which starts reading from the most recent message.
+    auto-offset-reset: earliest
+    #Specifies how to deserialize the key of the Kafka messages.
+    #StringDeserializer converts the key from bytes to a string.
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    #Specifies how to deserialize the value of Kafka messages.
+    #StringDeserializer converts the value from bytes to a string.
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  producer:
+    #Specifies how to serialize the key of Kafka messages.
+    #StringSerializer converts the key from a string to bytes before sending it to Kafka.
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #Specifies how to serialize the value of Kafka messages.
+    #StringSerializer converts the value from a string to bytes before sending it to Kafka.
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
