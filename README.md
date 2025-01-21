@@ -1,5 +1,34 @@
+# Spring Boot Kafka Batch Processing
 
-# Set up Kafka using Docker Compose, which makes it easy to run both Kafka and its dependency ZooKeeper.
+Spring Boot application that demonstrates batch processing with Kafka and Quartz scheduler.
+
+1. **Kafka Producer:**
+
+- Exposes a REST endpoint to receive messages
+- Sends messages to a Kafka topic called "message-topic"
+
+
+2. **Kafka Consumer:**
+
+- Listens to the "message-topic"
+- Buffers messages in a thread-safe list
+
+
+3. **Spring Batch:**
+
+- Processes messages in chunks of 10
+- Converts messages to entities and saves them to the database
+- Uses H2 in-memory database for simplicity
+
+
+4. **Quartz Scheduler:**
+
+- Triggers the batch job every 30 seconds
+
+![alt text](https://github.com/Zaki-Essay/SpringBootKafkaBatchProcessing/blob/main/Sans-titre-2024-02-17-2245.png?raw=true)
+
+# Project Setup
+**Set up Kafka using Docker Compose, which makes it easy to run both Kafka and its dependency ZooKeeper.**
 
 
 
@@ -7,50 +36,50 @@
 # docker-compose.yml
 version: '3'
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "22181:2181"
-    networks:
-      - kafka-net
+   zookeeper:
+      image: confluentinc/cp-zookeeper:latest
+      container_name: zookeeper
+      environment:
+         ZOOKEEPER_CLIENT_PORT: 2181
+         ZOOKEEPER_TICK_TIME: 2000
+      ports:
+         - "22181:2181"
+      networks:
+         - kafka-net
 
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
-    depends_on:
-      - zookeeper
-    ports:
-      - "29092:29092"
-      - "9092:9092"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks:
-      - kafka-net
+   kafka:
+      image: confluentinc/cp-kafka:latest
+      container_name: kafka
+      depends_on:
+         - zookeeper
+      ports:
+         - "29092:29092"
+         - "9092:9092"
+      environment:
+         KAFKA_BROKER_ID: 1
+         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+         KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+         KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      networks:
+         - kafka-net
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop:latest
-    container_name: kafdrop
-    depends_on:
-      - kafka
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: kafka:29092
-    networks:
-      - kafka-net
+   kafdrop:
+      image: obsidiandynamics/kafdrop:latest
+      container_name: kafdrop
+      depends_on:
+         - kafka
+      ports:
+         - "9000:9000"
+      environment:
+         KAFKA_BROKERCONNECT: kafka:29092
+      networks:
+         - kafka-net
 
 networks:
-  kafka-net:
-    driver: bridge
+   kafka-net:
+      driver: bridge
 
 ```
 
