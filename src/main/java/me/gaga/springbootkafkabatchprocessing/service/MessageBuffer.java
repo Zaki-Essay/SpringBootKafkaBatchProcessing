@@ -19,4 +19,8 @@ public class MessageBuffer {
         messages.clear();
         return result;
     }
+
+    public int size() {
+        return messages.size();
+    }
 }

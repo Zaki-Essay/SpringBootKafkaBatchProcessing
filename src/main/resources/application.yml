@@ -1,32 +1,30 @@
 spring:
   application:
     name: SpringBootKafkaBatchProcessing
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: batch-group
+      auto-offset-reset: earliest
+  # Database Configuration
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:kafkaDb
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
-
-    kafka:
-      bootstrap-servers: localhost:9092
-      consumer:
-        group-id: batch-group
-        auto-offset-reset: earliest
-      # Database Configuration
-      datasource:
-        url: jdbc:h2:mem:kafkaApp
-        driverClassName: org.h2.Driver
-        username: sa
-        password: password
-
-      # JPA Configuration
-      jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
-
-      # H2 Console Configuration
-      h2:
-        console:
-          enabled: true
-
-      # Batch Configuration
-      batch:
-        job:
-          enabled: false
-        jdbc:
-          initialize-schema: always
+  # Batch Configuration
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
