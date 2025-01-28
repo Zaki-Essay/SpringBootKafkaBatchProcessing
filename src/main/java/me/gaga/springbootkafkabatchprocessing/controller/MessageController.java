@@ -1,6 +1,7 @@
 package me.gaga.springbootkafkabatchprocessing.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.gaga.springbootkafkabatchprocessing.dto.MessageRequestDto;
 import me.gaga.springbootkafkabatchprocessing.service.KafkaProducer;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,7 @@ public class MessageController {
     private final KafkaProducer kafkaProducer;
 
     @PostMapping
-    public void sendMessage(@RequestBody String message) {
-        kafkaProducer.sendMessage(message);
+    public void sendMessage(@RequestBody MessageRequestDto messageRequestDto) {
+        kafkaProducer.sendMessage(messageRequestDto);
     }
 }
